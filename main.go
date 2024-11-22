@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 func enableCors(w *http.ResponseWriter) {
@@ -16,6 +19,14 @@ func saveIPHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Only POST requests are allowed", http.StatusBadRequest)
 	}
+	var data map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	currentTime := time.Now().Format("YYYY-MM-DD HH:MM:SS")
+
+	fmt.Print(currentTime)
 
 }
 func main() {
